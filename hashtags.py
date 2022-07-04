@@ -42,7 +42,7 @@ def split_hashtag(text):
     return final_list
 
 dictionary = {}
-file = open('example - Sheet1.tsv')
+file = open('frequency.tsv')
 fileLines = file.read().split('\n')
 
 for index in range(len(fileLines)):
