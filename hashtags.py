@@ -3,15 +3,20 @@
 
 import re
 from collections import Counter
+from arguments import getArguments
 
-def split_hashtag(text):
+args = getArguments()
+
+def split_hashtag ():
     probs, lasts = [1.0], [0]
     ok = False
+    text = args.hashtag
     text = text.lower()
     last_position = 0
     if text[0] == '#':
         text = text.replace(text[0], '')
         ok = True
+    text = text.replace(text[0], '')
     final_list = []
     for i in range(1, len(text) + 1):
         prob_k, k = max((probs[j] * word_prob(text[j:i]), j)
@@ -42,10 +47,10 @@ def split_hashtag(text):
     return final_list
 
 dictionary = {}
-file = open('frequency.tsv')
+file = args.frequency_file
 fileLines = file.read().split('\n')
 
-for index in range(len(fileLines)):
+for index in range(len(fileLines) - 1):
     key, value = fileLines[index].split('\t')
     value = int(value)
     dictionary[key] = value
@@ -61,4 +66,4 @@ def words(text):
 max_word_length = max(map(len, dictionary))
 total = float(sum(dictionary.values()))
 
-print(split_hashtag('#orasulbucuresti'))
+print(split_hashtag())
