@@ -7,16 +7,26 @@ from arguments import getArguments
 
 args = getArguments()
 
+def replace_diacritice(s):
+    s = s.replace("ă","a").replace("î","i").replace("â","a").replace("ș","s").replace("ț","t")
+    if args.lower == "Yes":
+        return s
+    if args.lower == "No":
+        return s.replace("Ă","A").replace("Î","I").replace("Â","A").replace("Ș","S").replace("Ț","T")
+
 def split_hashtag ():
     probs, lasts = [1.0], [0]
     ok = False
     text = args.hashtag
-    text = text.lower()
+    if args.lower == "Yes":
+        text = text.lower()
+    if args.remove_diacritics == "Yes":
+        text = replace_diacritice(text)
     last_position = 0
+    text = text.replace(text[0], '')
     if text[0] == '#':
         text = text.replace(text[0], '')
         ok = True
-    text = text.replace(text[0], '')
     final_list = []
     for i in range(1, len(text) + 1):
         prob_k, k = max((probs[j] * word_prob(text[j:i]), j)
@@ -61,7 +71,7 @@ def word_prob(word):
     return dictionary[word] / total
 
 def words(text): 
-    return re.findall('[a-z]+', text.lower()) 
+    return re.findall('[a-z]+', text.lower())
 
 max_word_length = max(map(len, dictionary))
 total = float(sum(dictionary.values()))
