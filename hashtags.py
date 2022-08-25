@@ -1,5 +1,6 @@
-# Original code from: https://stackoverflow.com/questions/195010/how-can-i-split-multiple-joined-words.
-# Adapted code to return list of tokens and their ranges.
+# Implemented during a research stage at ICIA. 
+# Viterbi algorithm from https://stackoverflow.com/questions/195010/how-can-i-split-multiple-joined-words, 
+# adapted to the Romanian language. 
 
 import re
 from collections import Counter
@@ -14,16 +15,24 @@ def replace_diacritice(s):
     if args.lower == "No":
         return s.replace("Ă","A").replace("Î","I").replace("Â","A").replace("Ș","S").replace("Ț","T")
 
+def upper_letters(hashtag):
+    list = []
+    for index in range(len(hashtag)):
+        if hashtag[index].isupper():
+            list.append(index)
+    return list
+
 def split_hashtag ():
     probs, lasts = [1.0], [0]
     ok = False
     text = args.hashtag
-    if args.lower == "Yes":
-        text = text.lower()
+    text = text.replace(text[0], '')
+    if args.lower == "No":
+        found_index = upper_letters(text)
+    text = text.lower()
     if args.remove_diacritics == "Yes":
         text = replace_diacritice(text)
     last_position = 0
-    text = text.replace(text[0], '')
     if text[0] == '#':
         text = text.replace(text[0], '')
         ok = True
@@ -43,7 +52,17 @@ def split_hashtag ():
         test_dict = {}
         sample = re.search(words[index], text[last_position:])
         sample_tuple = sample.span()
-        test_dict['token'] = words[index]
+        found_word = words[index]
+        if args.lower == "No":
+            if ok == True:
+                for index_2 in range(len(found_index)):
+                    found_word = found_word.replace(found_word[found_index[index_2] - 1],
+                                                    found_word[found_index[index_2] - 1].upper())
+            else:
+                for index_2 in range(len(found_index)):
+                    found_word = found_word.replace(found_word[found_index[index_2]],
+                                                    found_word[found_index[index_2]].upper())
+        test_dict['token'] = found_word
         if ok == True:
             test_dict['start'] = sample_tuple[0] + 1
             test_dict['end'] = sample_tuple[1]
@@ -69,9 +88,6 @@ dictionary = Counter(dictionary)
 
 def word_prob(word): 
     return dictionary[word] / total
-
-def words(text): 
-    return re.findall('[a-z]+', text.lower())
 
 max_word_length = max(map(len, dictionary))
 total = float(sum(dictionary.values()))
