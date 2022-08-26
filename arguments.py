@@ -1,7 +1,5 @@
 import argparse
 
-from parso import parse
-
 def getArguments():
     parser=argparse.ArgumentParser()
     parser.add_argument("--frequency_file",
