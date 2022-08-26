@@ -49,7 +49,7 @@ def split_hashtag ():
         i = lasts[i]
     words.reverse()
     for index in range(len(words)):
-        test_dict = {}
+        word_dict = {}
         sample = re.search(words[index], text[last_position:])
         sample_tuple = sample.span()
         found_word = words[index]
@@ -62,17 +62,17 @@ def split_hashtag ():
                 for index_2 in range(len(found_index)):
                     found_word = found_word.replace(found_word[found_index[index_2]],
                                                     found_word[found_index[index_2]].upper())
-        test_dict['token'] = found_word
+        word_dict['token'] = found_word
         if ok == True:
-            test_dict['start'] = sample_tuple[0] + 1
-            test_dict['end'] = sample_tuple[1]
+            word_dict['start'] = sample_tuple[0] + 1
+            word_dict['end'] = sample_tuple[1]
         else:
-            test_dict['start'] = sample_tuple[0]
-            test_dict['end'] = sample_tuple[1] - 1
-        test_dict['start'] += last_position
-        test_dict['end'] += last_position
-        last_position = test_dict['end']
-        final_list.append(test_dict)
+            word_dict['start'] = sample_tuple[0]
+            word_dict['end'] = sample_tuple[1] - 1
+        word_dict['start'] += last_position
+        word_dict['end'] += last_position
+        last_position = word_dict['end']
+        final_list.append(word_dict)
     return final_list
 
 dictionary = {}
