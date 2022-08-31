@@ -20,6 +20,10 @@ def getArguments():
         default = 'Yes',
         choices = ['Yes', 'No'],
         help = "Asks if user wants the expression to be all lowercase.")
+    parser.add_argument("--process_frequency_list",
+        default = 'No',
+        choices = ['Yes', 'No'],
+        help = "Asks if user wants to apply the lower and remove_diacritics arguments to the frequency list.")
 
     args=parser.parse_args()
     return args
