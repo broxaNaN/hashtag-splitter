@@ -19,7 +19,7 @@ def replace_diacritics(s):
 def split_hashtag():
     probs, lasts = [1.0], [0] 
     ok = False
-    text = args.hashtag
+    text = args.hashtag.encode().decode('unicode_escape')
     text = text.replace(text[0], '')
     original_text = text
     if args.lower == "Yes":
@@ -85,4 +85,4 @@ def word_prob(word):
 max_word_length = max(map(len, dictionary))
 total = float(sum(dictionary.values()))
 
-print(json.dumps(split_hashtag()))
+print(json.dumps(split_hashtag(),ensure_ascii=False))
